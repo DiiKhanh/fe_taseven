@@ -24,20 +24,10 @@ import {
 import {appColors} from '../../constants/appColors';
 import {fontFamilies} from '../../constants/fontFamilies';
 import {globalStyles} from '../../styles/globalStyles';
-import {useIsFocused} from '@react-navigation/native';
 
 
 const HomeScreen = ({navigation}: any) => {
   const [isLoading, setIsLoading] = useState(false);
-
-  const isFocused = useIsFocused();
-
-  const categories = [
-    {label: 'Food', value: '65f27187a08051b6ce99084d'},
-    {label: 'Sports', value: '65f27187a08051b6ce990849'},
-    {label: 'Music', value: '65f27187a08051b6ce99084b'},
-    {label: 'Art', value: '65f27187a08051b6ce99084f'},
-  ];
 
 
   return (

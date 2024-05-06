@@ -13,4 +13,13 @@ export const appColors = {
   link: '#5669FF',
   danger: '#e74c3c',
   danger2: '#F0635A',
+  blue: '#3618e0',
+  bgColor: '#171719',
+  text_t: '#fafafa',
+  desc: '#e6e6e6',
+  white_t: '#fafafa',
+  error: '#e74c3c',
+  success: '#00733B',
+  gray_t: '#222329',
+  gray2_t: '#696B6F',
 };

@@ -108,4 +108,47 @@ export const globalStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+
+  iconContainer_t: {
+    width: 40,
+    height: 40,
+    borderRadius: 100,
+    backgroundColor: 'rgba(0,0,0,0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  row_t: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  inputContainer_t: {
+    backgroundColor: appColors.gray,
+    borderRadius: 12,
+    paddingHorizontal: Platform.OS === 'ios' ? 12 : 10,
+    paddingVertical: 16,
+  },
+  card_t: {
+    borderRadius: 12,
+  },
+  container_t: {
+    flex: 1,
+    backgroundColor: appColors.bgColor,
+  },
+  section_t: {
+    marginBottom: 16,
+    paddingHorizontal: 20,
+  },
+  tag_t: {
+    paddingHorizontal: 20,
+    paddingVertical: Platform.OS === 'ios' ? 6 : 4,
+    borderRadius: 100,
+    backgroundColor: appColors.blue,
+  },
+  text_t: {
+    fontSize: 14,
+    fontFamily: fontFamilies.regular,
+    color: appColors.text_t,
+  },
 });

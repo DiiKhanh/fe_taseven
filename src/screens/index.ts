@@ -7,6 +7,7 @@ import Verification from './auth/Verification';
 import HomeScreen from './home/HomeScreen';
 import EditProfileScreen from './profile/EditProfileScreen';
 import ProfileScreen from './profile/ProfileScreen';
+import HomeTaskScreen from './home-task/HomeTaskScreen';
 
 export {
   HomeScreen,
@@ -18,4 +19,5 @@ export {
   ProfileScreen,
   NotFound,
   EditProfileScreen,
+  HomeTaskScreen,
 };
