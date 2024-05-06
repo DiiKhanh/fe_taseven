@@ -34,7 +34,7 @@ const ForgotPassword = () => {
         'post',
       );
 
-      console.log(res);
+      console.log('fogot pw', res);
 
       Alert.alert('Send mail', 'We sended a email includes new password!!!');
       setIsLoading(false);

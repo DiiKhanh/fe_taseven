@@ -30,7 +30,12 @@ const LoginScreen = ({navigation}: any) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const emailValidation = Validate.email(email);
+    let emailValidation;
+    if (email.includes('@')) {
+      emailValidation = Validate.email(email);
+    } else {
+      emailValidation = Validate.username(email);
+    }
 
     if (!email || !password || !emailValidation) {
       setIsDisable(true);
@@ -40,14 +45,26 @@ const LoginScreen = ({navigation}: any) => {
   }, [email, password]);
 
   const handleLogin = async () => {
-    const emailValidation = Validate.email(email);
+    let emailValidation;
+    let isEmail = false;
+    if (email.includes('@')) {
+      emailValidation = Validate.email(email);
+      isEmail = true;
+    } else {
+      emailValidation = Validate.username(email);
+    }
     setIsLoading(true);
     if (emailValidation) {
       setIsLoading(true);
       try {
+        const data = {
+          email: isEmail ? email : '',
+          password,
+          username: isEmail ? '' : email,
+        };
         const res = await authenticationAPI.HandleAuthentication(
           '/login',
-          {email, password},
+          data,
           'post',
         );
         dispatch(addAuth(res.data));
@@ -63,7 +80,7 @@ const LoginScreen = ({navigation}: any) => {
         setIsLoading(false);
       }
     } else {
-      Alert.alert('Email is not correct!!!!');
+      Alert.alert('Email or Username is not correct!!!!');
     }
   };
 
@@ -89,7 +106,7 @@ const LoginScreen = ({navigation}: any) => {
         <SpaceComponent height={21} />
         <InputComponent
           value={email}
-          placeholder="Email"
+          placeholder="Email or Username"
           onChange={val => setEmail(val)}
           allowClear
           affix={<Sms size={22} color={appColors.gray} />}

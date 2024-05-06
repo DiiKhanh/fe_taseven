@@ -6,6 +6,13 @@ export class Validate {
     return false;
   }
 
+  static username(username: string) {
+    if (/^(?=[a-zA-Z0-9._]{3,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/.test(username)) {
+      return true;
+    }
+    return false;
+  }
+
   static Password = (val: string) => {
     return val.length >= 6;
   };

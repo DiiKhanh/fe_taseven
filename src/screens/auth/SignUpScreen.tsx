@@ -37,10 +37,10 @@ const SignUpScreen = ({navigation}: any) => {
       (errorMessage &&
         (errorMessage.email ||
           errorMessage.password ||
-          errorMessage.confirmPassword)) ||
+          errorMessage.confirmPassword || errorMessage.username)) ||
       !values.email ||
       !values.password ||
-      !values.confirmPassword
+      !values.confirmPassword || !values.username
     ) {
       setIsDisable(true);
     } else {
@@ -70,6 +70,16 @@ const SignUpScreen = ({navigation}: any) => {
           message = '';
         }
 
+        break;
+
+      case 'username':
+        if (!values.username) {
+          message = 'Username is required!!!';
+        } else if (!Validate.username(values.username)) {
+          message = 'Username is not invalid!!';
+        } else {
+          message = '';
+        }
         break;
 
       case 'password':
@@ -108,7 +118,7 @@ const SignUpScreen = ({navigation}: any) => {
         ...values,
       });
     } catch (error) {
-      console.log(error);
+      console.log('err signup', error);
       setIsLoading(false);
     }
   };
@@ -125,6 +135,7 @@ const SignUpScreen = ({navigation}: any) => {
             onChange={val => handleChangeValue('username', val)}
             allowClear
             affix={<User size={22} color={appColors.gray} />}
+            onEnd={() => formValidator('username')}
           />
           <InputComponent
             value={values.email}

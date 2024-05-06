@@ -7,5 +7,6 @@ module.exports = {
     'react-hooks/exhaustive-deps': 0,
     'no-unused-vars': 1,
     '@typescript-eslint/no-unused-vars': ['warn'],
+    'react/no-unstable-nested-components': 0,
   },
 };

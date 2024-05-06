@@ -1,17 +1,12 @@
 import {
   View,
-  Text,
   TouchableOpacity,
   TextInput,
-  StyleSheet,
-  TextInputProps,
   KeyboardType,
   StyleProp,
   ViewStyle,
 } from 'react-native';
 import React, {ReactNode, useState} from 'react';
-import {Touchable} from 'react-native';
-import {EyeSlash} from 'iconsax-react-native';
 import {appColors} from '../constants/appColors';
 import {globalStyles} from '../styles/globalStyles';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -30,6 +25,7 @@ interface Props {
   multiline?: boolean;
   numberOfLine?: number;
   styles?: StyleProp<ViewStyle>;
+  editable?: boolean;
 }
 
 const InputComponent = (props: Props) => {
@@ -46,6 +42,7 @@ const InputComponent = (props: Props) => {
     multiline,
     numberOfLine,
     styles,
+    editable,
   } = props;
 
   const [isShowPass, setIsShowPass] = useState(isPassword ?? false);
@@ -72,6 +69,7 @@ const InputComponent = (props: Props) => {
         keyboardType={type ?? 'default'}
         autoCapitalize="none"
         onEndEditing={onEnd}
+        editable={editable}
       />
       {suffix ?? suffix}
       <TouchableOpacity

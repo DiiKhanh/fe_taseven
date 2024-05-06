@@ -13,11 +13,20 @@ const OnboardingScreen = ({navigation}: any) => {
   return (
     <View style={[globalStyles.container]}>
       <Swiper
-        style={{}}
+        paginationStyle={{ bottom: 15 }}
         loop={false}
         onIndexChanged={num => setIndex(num)}
         index={index}
         activeDotColor={appColors.white}>
+        <Image
+          source={require('../../assets/images/onboarding-4.png')}
+          style={{
+            flex: 1,
+            width: appInfo.sizes.WIDTH,
+            height: appInfo.sizes.HEIGHT,
+            resizeMode: 'cover',
+          }}
+        />
         <Image
           source={require('../../assets/images/onboarding-1.png')}
           style={{
@@ -52,9 +61,9 @@ const OnboardingScreen = ({navigation}: any) => {
             paddingHorizontal: 16,
             paddingVertical: 20,
             position: 'absolute',
-            bottom: 20,
-            right: 20,
-            left: 20,
+            bottom: 0,
+            right: 10,
+            left: 10,
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
@@ -69,7 +78,7 @@ const OnboardingScreen = ({navigation}: any) => {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() =>
-            index < 2 ? setIndex(index + 1) : navigation.navigate('LoginScreen')
+            index < 3 ? setIndex(index + 1) : navigation.navigate('LoginScreen')
           }>
           <TextComponent
             text="Next"
