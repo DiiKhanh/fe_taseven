@@ -7,4 +7,5 @@ export interface ProfileModel {
   id: string;
   fullname: string;
   filename: string;
+  type?: 'Organizer' | 'Personal' | undefined;
 }

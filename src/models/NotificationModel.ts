@@ -7,4 +7,7 @@ export interface NotificationModel {
   title: string;
   uid: string;
   updatedAT: number;
+  from: string;
+  eventId: string;
+  content: string;
 }
