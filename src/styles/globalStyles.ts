@@ -1,4 +1,4 @@
-import {Platform, StyleSheet} from 'react-native';
+import {Platform, StyleSheet, Dimensions} from 'react-native';
 import {appColors} from '../constants/appColors';
 import {fontFamilies} from '../constants/fontFamilies';
 
@@ -150,5 +150,24 @@ export const globalStyles = StyleSheet.create({
     fontSize: 14,
     fontFamily: fontFamilies.regular,
     color: appColors.text_t,
+  },
+
+  modal: {
+    flex: 1,
+  },
+
+  modalContainer: {
+    padding: 20,
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  modalContent: {
+    width: Dimensions.get('window').width * 0.8,
+    padding: 20,
+    borderRadius: 12,
+    backgroundColor: appColors.white_t,
   },
 });

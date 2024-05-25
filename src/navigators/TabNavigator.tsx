@@ -1,5 +1,5 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {AddSquare, Calendar, Location, User, TaskSquare, NoteAdd} from 'iconsax-react-native';
+import {AddSquare, Calendar, Location, User, TaskSquare} from 'iconsax-react-native';
 import React, {ReactNode} from 'react';
 import {Platform} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -9,6 +9,7 @@ import {globalStyles} from '../styles/globalStyles';
 import ExploreNavigator from './ExploreNavigator';
 import ProfileNavigator from './ProfileNavigator';
 import TaskNavigator from './TaskNavigator';
+import { AddEventScreen } from '../screens';
 
 const TabNavigator = () => {
   const Tab = createBottomTabNavigator();
@@ -32,10 +33,8 @@ const TabNavigator = () => {
             case 'Tasks':
               icon = <TaskSquare size={size} color={color} />;
               break;
-            case 'AddTask':
-              icon = <NoteAdd size={size} color={color} />;
-              break;
-            case 'Explore':
+
+              case 'Explore':
               icon = <MaterialIcons name="explore" size={size} color={color} />;
               break;
 
@@ -51,14 +50,15 @@ const TabNavigator = () => {
 
             case 'Add':
               icon = (
-                <CircleComponent
-                  size={52}
-                  styles={[
-                    globalStyles.shadow,
-                    {marginTop: Platform.OS === 'ios' ? -50 : -60},
-                  ]}>
-                  <AddSquare size={24} color={appColors.white} variant="Bold" />
-                </CircleComponent>
+              //   <CircleComponent
+              //     size={52}
+              //     styles={[
+              //       globalStyles.shadow,
+              //       {marginTop: Platform.OS === 'ios' ? -50 : -60},
+              //     ]}>
+                  // <AddSquare size={24} color={appColors.white} variant="Bold" />
+                  <AddSquare size={size} color={color} variant="Bold" />
+                // </CircleComponent>
               );
               break;
           }
@@ -69,7 +69,18 @@ const TabNavigator = () => {
         },
         tabBarLabelPosition: 'below-icon',
         tabBarLabel({focused}) {
-          return route.name === 'Add' ? null : (
+          // return route.name === 'Add' ? null : (
+          //   <TextComponent
+          //     text={route.name}
+          //     flex={0}
+          //     size={12}
+          //     color={focused ? appColors.primary : appColors.gray5}
+          //     styles={{
+          //       marginBottom: Platform.OS === 'android' ? 12 : 0,
+          //     }}
+          //   />
+          // );
+          return (
             <TextComponent
               text={route.name}
               flex={0}
@@ -83,10 +94,9 @@ const TabNavigator = () => {
         },
       })}>
       <Tab.Screen name="Tasks" component={TaskNavigator} />
-      <Tab.Screen name="AddTask" component={ExploreNavigator} />
       <Tab.Screen name="Explore" component={ExploreNavigator} />
-      <Tab.Screen name="Add" component={ExploreNavigator} />
       <Tab.Screen name="Events" component={ExploreNavigator} />
+      <Tab.Screen name="Add" component={AddEventScreen} />
       <Tab.Screen name="Map" component={ExploreNavigator} />
       <Tab.Screen name="Profile" component={ProfileNavigator} />
     </Tab.Navigator>

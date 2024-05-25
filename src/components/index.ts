@@ -10,6 +10,8 @@ import RowComponent from './RowComponent';
 import SectionComponent from './SectionComponent';
 import SpaceComponent from './SpaceComponent';
 import TextComponent from './TextComponent';
+import DropdownPicker from './DropdownPicker';
+import DateTimePicker from './DateTimePicker';
 
 export {
   SpaceComponent,
@@ -24,4 +26,6 @@ export {
   DrawerCustom,
   LoadingComponent,
   ButtonImagePicker,
+  DropdownPicker,
+  DateTimePicker,
 };

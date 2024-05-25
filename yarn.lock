@@ -1673,6 +1673,11 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
+"@miblanchard/react-native-slider@^2.6.0":
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/@miblanchard/react-native-slider/-/react-native-slider-2.6.0.tgz#9f78c805d637ffaff0e3e7429932d2995a67edc9"
+  integrity sha512-o7hk/f/8vkqh6QNR5L52m+ws846fQeD/qNCC9CCSRdBqjq66KiCgbxzlhRzKM/gbtxcvMYMIEEJ1yes5cr6I3A==
+
 "@nicolo-ribaudo/eslint-scope-5-internals@5.1.1-v1":
   version "5.1.1-v1"
   resolved "https://registry.yarnpkg.com/@nicolo-ribaudo/eslint-scope-5-internals/-/eslint-scope-5-internals-5.1.1-v1.tgz#dbf733a965ca47b1973177dc0bb6c889edcfb129"
@@ -1870,6 +1875,11 @@
   dependencies:
     opencollective-postinstall "^2.0.3"
     superstruct "^0.6.2"
+
+"@react-native-firebase/storage@^20.0.0":
+  version "20.0.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/storage/-/storage-20.0.0.tgz#a80387acaffa4d9ec12af64b80d3ccbe4e35d0c2"
+  integrity sha512-1aqkCG41Y0dSSrlyJwRKM7LHhxbUxMNaekTTJs2Tw7BhdirJfVUg4pvWqeNMpru6/ZZdby26B/mA0riI8caggA==
 
 "@react-native-google-signin/google-signin@^11.0.1":
   version "11.0.1"
@@ -6686,6 +6696,18 @@ react-native-circular-progress-indicator@^4.4.2:
   integrity sha512-BlgshzIIIk0TP/CZY+5oyRsHl2Sb2l6cK5tzfmrVETfn6pN8dhOKrV0i3Z6i0SM8wRgncdUUSRBpCPAexh7JoQ==
   dependencies:
     react-native-redash "*"
+
+react-native-date-picker@^5.0.2:
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-date-picker/-/react-native-date-picker-5.0.2.tgz#7a9cc42c086fe1ebfe39d2f431f523d924239ae6"
+  integrity sha512-ZibwqA+6W+uOLzeblsKnMQT2zZpnOw/tKFotgyrLZuTPTcwMvnnlzi5QhSjB203PhyFEElbcFrIuHJQpb/Zahw==
+
+react-native-document-picker@^9.2.0:
+  version "9.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-document-picker/-/react-native-document-picker-9.2.0.tgz#e5d58c8166813488e0ea033c61ae1bc32b50fd34"
+  integrity sha512-eJx1aa8e0XBPPIxz7NajH4pdBWoCZ84LHY9AQ9Gqn1P+Pv7ILDal9l8vupt6eTumh0hSz2QEcfwijQa38H1Yew==
+  dependencies:
+    invariant "^2.2.4"
 
 react-native-dotenv@^3.4.11:
   version "3.4.11"

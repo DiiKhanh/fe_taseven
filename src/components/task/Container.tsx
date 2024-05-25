@@ -28,6 +28,7 @@ const Container = (props: Props) => {
 
         <RowComponent
           styles={{
+            marginTop: 20,
             paddingHorizontal: 16,
             paddingBottom: 16,
             justifyContent: 'center',

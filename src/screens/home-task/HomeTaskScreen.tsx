@@ -38,25 +38,26 @@ const HomeTaskScreen = ({navigation}: any) => {
 
   const tasks = [
     {
+    id: '123',
     uids: ['1234'],
     title: 'task',
     dueDate: date,
     progress: 0.7,
-    desctiption: '12131341',
+    description: '12131341',
     },
     {
       uids: ['123112'],
       title: 'task1',
       dueDate: date,
       progress: 1,
-      desctiption: '12131341',
+      description: '12131341',
       },
       {
         uids: ['123213234'],
         title: 'task2',
         dueDate: date,
         progress: 0.2,
-        desctiption: '12131341',
+        description: '12131341',
         },
   ];
   const urgentTask = [{
@@ -66,6 +67,11 @@ const HomeTaskScreen = ({navigation}: any) => {
   }];
 
   const isLoading = false;
+  const handleMoveToTaskDetail = (id?: string, color?: string) =>
+    navigation.navigate('TaskDetail', {
+      id,
+      color,
+    });
 
   return (
     <View style={{flex: 1}}>
@@ -76,7 +82,7 @@ const HomeTaskScreen = ({navigation}: any) => {
               <HambergerMenu size={24} color={appColors.white_t} />
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => navigation.navigate('Notifications')}>
+              onPress={() => navigation.navigate('TaskNotifications')}>
               <Notification size={24} color={appColors.desc} />
               {unReadNotifications.length > 0 && (
                 <View
@@ -108,14 +114,23 @@ const HomeTaskScreen = ({navigation}: any) => {
         </SectionComponent>
         <SectionComponent>
           <RowComponent
-            styles={[globalStyles.inputContainer_t]}>
+            styles={[globalStyles.inputContainer_t]}
+            onPress={() => navigation.navigate('ListTasks', {
+            tasks })
+            }
+            >
             <TextComponent color="#f2f2f2" text="Search task" />
             <SearchNormal1 size={20} color={appColors.desc} />
           </RowComponent>
         </SectionComponent>
         <SectionComponent>
           <CardComponent>
-            <RowComponent>
+            <RowComponent
+            onPress={() =>
+            navigation.navigate('ListTasks', {
+              tasks,
+            })
+            }>
               <View style={{flex: 1}}>
                 <TitleComponent text="Task progress" />
                 <TextComponent
@@ -169,10 +184,11 @@ const HomeTaskScreen = ({navigation}: any) => {
             <RowComponent styles={{alignItems: 'flex-start'}}>
               <View style={{flex: 1}}>
                 {tasks[0] && (
-                  <CardImageConponent>
+                  <CardImageConponent onPress={() => handleMoveToTaskDetail(tasks[0].id as string)
+                  }>
                     <TouchableOpacity
                       onPress={() =>
-                        navigation.navigate('AddNewTask', {
+                        navigation.navigate('AddTaskScreen', {
                           editable: true,
                           task: tasks[0],
                         })
@@ -184,7 +200,7 @@ const HomeTaskScreen = ({navigation}: any) => {
                     <TitleComponent text={tasks[0].title} />
                     <TextComponent
                       line={3}
-                      text={tasks[0].desctiption}
+                      text={tasks[0].description}
                       size={13}
                     />
 
@@ -218,7 +234,7 @@ const HomeTaskScreen = ({navigation}: any) => {
                   <CardImageConponent color="rgba(33, 150, 243, 0.9)">
                     <TouchableOpacity
                       onPress={() =>
-                        navigation.navigate('AddNewTask', {
+                        navigation.navigate('AddTaskScreen', {
                           editable: true,
                           task: tasks[1],
                         })
@@ -244,7 +260,7 @@ const HomeTaskScreen = ({navigation}: any) => {
                   <CardImageConponent color="rgba(18, 181, 22, 0.9)">
                     <TouchableOpacity
                       onPress={() =>
-                        navigation.navigate('AddNewTask', {
+                        navigation.navigate('AddTaskScreen', {
                           editable: true,
                           task: tasks[2],
                         })
@@ -254,7 +270,7 @@ const HomeTaskScreen = ({navigation}: any) => {
                     </TouchableOpacity>
                     <TitleComponent text={tasks[2].title} />
                     <TextComponent
-                      text={tasks[2].desctiption}
+                      text={tasks[2].description}
                       line={3}
                       size={13}
                     />
@@ -310,7 +326,7 @@ const HomeTaskScreen = ({navigation}: any) => {
         <TouchableOpacity
           activeOpacity={1}
           onPress={() =>
-            navigation.navigate('AddNewTask', {
+            navigation.navigate('AddTaskScreen', {
               editable: false,
               task: undefined,
             })
