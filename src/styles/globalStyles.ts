@@ -1,4 +1,4 @@
-import {Platform, StyleSheet} from 'react-native';
+import {Platform, StyleSheet, Dimensions} from 'react-native';
 import {appColors} from '../constants/appColors';
 import {fontFamilies} from '../constants/fontFamilies';
 
@@ -107,5 +107,67 @@ export const globalStyles = StyleSheet.create({
   center: {
     justifyContent: 'center',
     alignItems: 'center',
+  },
+
+  iconContainer_t: {
+    width: 40,
+    height: 40,
+    borderRadius: 100,
+    backgroundColor: 'rgba(0,0,0,0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  row_t: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  inputContainer_t: {
+    backgroundColor: appColors.gray,
+    borderRadius: 12,
+    paddingHorizontal: Platform.OS === 'ios' ? 12 : 10,
+    paddingVertical: 16,
+  },
+  card_t: {
+    borderRadius: 12,
+  },
+  container_t: {
+    flex: 1,
+    backgroundColor: appColors.bgColor,
+  },
+  section_t: {
+    marginBottom: 16,
+    paddingHorizontal: 20,
+  },
+  tag_t: {
+    paddingHorizontal: 20,
+    paddingVertical: Platform.OS === 'ios' ? 6 : 4,
+    borderRadius: 100,
+    backgroundColor: appColors.blue,
+  },
+  text_t: {
+    fontSize: 14,
+    fontFamily: fontFamilies.regular,
+    color: appColors.text_t,
+  },
+
+  modal: {
+    flex: 1,
+  },
+
+  modalContainer: {
+    padding: 20,
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  modalContent: {
+    width: Dimensions.get('window').width * 0.8,
+    padding: 20,
+    borderRadius: 12,
+    backgroundColor: appColors.white_t,
   },
 });

@@ -8,6 +8,7 @@ export interface AuthState {
   fcmTokens?: string[];
   following?: string[];
   photoUrl?: string;
+  username: string;
 }
 
 const initialState: AuthState = {
@@ -15,6 +16,7 @@ const initialState: AuthState = {
   email: '',
   accesstoken: '',
   follow_events: [],
+  username: '',
 };
 
 const authSlice = createSlice({

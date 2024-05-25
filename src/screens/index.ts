@@ -7,6 +7,12 @@ import Verification from './auth/Verification';
 import HomeScreen from './home/HomeScreen';
 import EditProfileScreen from './profile/EditProfileScreen';
 import ProfileScreen from './profile/ProfileScreen';
+import HomeTaskScreen from './home-task/HomeTaskScreen';
+import AddTaskScreen from './home-task/AddTaskScreen';
+import TaskDetail from './home-task/TaskDetail';
+import ListTasks from './home-task/ListTasks';
+import TaskNotifications from './home-task/TaskNotifications';
+import AddEventScreen from './AddEventScreen';
 
 export {
   HomeScreen,
@@ -18,4 +24,10 @@ export {
   ProfileScreen,
   NotFound,
   EditProfileScreen,
+  HomeTaskScreen,
+  AddEventScreen,
+  AddTaskScreen,
+  TaskDetail,
+  ListTasks,
+  TaskNotifications,
 };
