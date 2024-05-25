@@ -12,6 +12,8 @@ import SpaceComponent from './SpaceComponent';
 import TextComponent from './TextComponent';
 import DropdownPicker from './DropdownPicker';
 import DateTimePicker from './DateTimePicker';
+import UserComponent from './UserComponent';
+import AvatarGroup from './AvatarGroup';
 
 export {
   SpaceComponent,
@@ -28,4 +30,6 @@ export {
   ButtonImagePicker,
   DropdownPicker,
   DateTimePicker,
+  UserComponent,
+  AvatarGroup,
 };
