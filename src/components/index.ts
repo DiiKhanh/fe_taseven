@@ -14,6 +14,7 @@ import DropdownPicker from './DropdownPicker';
 import DateTimePicker from './DateTimePicker';
 import UserComponent from './UserComponent';
 import AvatarGroup from './AvatarGroup';
+import NotificationItem from './NotificationItem';
 
 export {
   SpaceComponent,
@@ -32,4 +33,5 @@ export {
   DateTimePicker,
   UserComponent,
   AvatarGroup,
+  NotificationItem,
 };
