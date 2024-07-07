@@ -28,7 +28,7 @@ const ExploreEvents = ({navigation, route}: any) => {
       const {key} = route.params;
 
       if (key === 'upcoming') {
-        getEvents(`/get-events?isUpcoming=true`);
+        getEvents('/get-events?isUpcoming=true');
       } else {
         GeoLocation.getCurrentPosition(
           (position: any) => {
@@ -49,7 +49,7 @@ const ExploreEvents = ({navigation, route}: any) => {
         );
       }
     } else {
-      getEvents(`/get-events`);
+      getEvents('/get-events');
     }
   }, [route]);
 
