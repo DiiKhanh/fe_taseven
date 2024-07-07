@@ -31,12 +31,25 @@ const DropdownPicker = (props: Props) => {
   const [isVisibleModalize, setIsVisibleModalize] = useState(false);
   const modalieRef = useRef<Modalize>();
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const [results, setResults] = useState<SelectModel[]>([]);
+
 
   useEffect(() => {
     if (isVisibleModalize) {
       modalieRef.current?.open();
     }
   }, [isVisibleModalize]);
+
+  useEffect(() => {
+    if (!searchKey) {
+      setResults([]);
+    } else {
+      const data = values.filter(element =>
+        element.label.toLowerCase().includes(searchKey.toLowerCase()),
+      );
+      setResults(data);
+    }
+  }, [searchKey]);
 
   useEffect(() => {
     if (isVisibleModalize && selected) {
@@ -154,7 +167,7 @@ const DropdownPicker = (props: Props) => {
           adjustToContentHeight
           FooterComponent={
             multible && (
-              <View style={{paddingHorizontal: 20, paddingBottom: 30}}>
+              <View style={{paddingHorizontal: 20, paddingBottom: 0}}>
                 <ButtonComponent
                   text="Agree"
                   type="primary"
@@ -179,7 +192,10 @@ const DropdownPicker = (props: Props) => {
                   styles={{marginBottom: 0}}
                   placeholder="Search..."
                   value={searchKey}
-                  onChange={val => setSearchKey(val)}
+                  onChange={val => {
+                    console.log(val);
+                    setSearchKey(val);
+                  }}
                   allowClear
                   affix={<SearchNormal1 size={22} color={appColors.text} />}
                 />
@@ -194,7 +210,7 @@ const DropdownPicker = (props: Props) => {
           }
           onClose={() => setIsVisibleModalize(false)}>
           <View style={{paddingHorizontal: 20, paddingVertical: 30}}>
-            {values.map(item => renderSelectItem(item))}
+            {searchKey ? results.map(item => renderSelectItem(item)) : values.map(item => renderSelectItem(item))}
           </View>
         </Modalize>
       </Portal>

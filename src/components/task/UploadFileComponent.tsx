@@ -1,4 +1,4 @@
-import {View, TouchableOpacity, Modal, Dimensions} from 'react-native';
+import {View, TouchableOpacity, Modal, Dimensions, Platform, PermissionsAndroid} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {Attachment} from '../../models/TaskModel';
 import {DocumentUpload} from 'iconsax-react-native';
@@ -14,6 +14,7 @@ import {calcFileSize} from '../../utils/calcFileSize';
 import {Slider} from '@miblanchard/react-native-slider';
 import RowComponent from './RowComponent';
 import storage from '@react-native-firebase/storage';
+import RNFetchBlob from 'rn-fetch-blob';
 
 interface Props {
   onUpload: (file: Attachment) => void;
@@ -22,10 +23,27 @@ interface Props {
 const UploadFileComponent = (props: Props) => {
   const {onUpload} = props;
 
+  const getFilePath = async (file: DocumentPickerResponse) => {
+    if (Platform.OS === 'ios') {
+      return file.uri;
+    } else {
+      return (await RNFetchBlob.fs.stat(file.uri)).path;
+    }
+  };
+
   const [file, setfile] = useState<DocumentPickerResponse>();
   const [isVisibelModalUpload, setIsVisibelModalUpload] = useState(false);
   const [progressUpload, setProgressUpload] = useState(0);
   const [attachmentFile, setAttachmentFile] = useState<Attachment>();
+
+  useEffect(() => {
+    if (Platform.OS === 'android') {
+      PermissionsAndroid.requestMultiple([
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+      ]);
+    }
+  },[]);
 
   useEffect(() => {
     file && handleUploadFileToStorage();
@@ -40,13 +58,13 @@ const UploadFileComponent = (props: Props) => {
     }
   }, [attachmentFile]);
 
-  const handleUploadFileToStorage = () => {
+  const handleUploadFileToStorage = async () => {
     if (file) {
       setIsVisibelModalUpload(true);
 
       const path = `/documents/${file.name}`;
-
-      const res = storage().ref(path).putFile(file.uri);
+      const uri = await getFilePath(file);
+      const res = storage().ref(path).putFile(uri);
 
       res.on('state_changed', task => {
         setProgressUpload(task.bytesTransferred / task.totalBytes);
@@ -98,7 +116,7 @@ const UploadFileComponent = (props: Props) => {
         transparent>
         <View
           style={[
-            globalStyles.container,
+            globalStyles.container_t,
             {
               backgroundColor: `${appColors.gray_t}80`,
               justifyContent: 'center',

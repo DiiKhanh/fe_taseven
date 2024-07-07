@@ -3,10 +3,17 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.MANAGE_DOCUMENTS"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+  <!-- Include only if your app benefits from precise location access. -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
+      android:requestLegacyExternalStorage="true"
+      android:hardwareAccelerated="true"
       android:name=".MainApplication"
       android:label="@string/app_name"
       android:icon="@mipmap/ic_launcher"
@@ -15,6 +22,7 @@
       android:theme="@style/AppTheme"
       android:usesCleartextTraffic="true"
       >
+      <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyCYTX0LPl_37YCsmBVg-ZjHaQEjZH_QbjQ"/>
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"

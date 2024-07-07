@@ -8,6 +8,7 @@ import {
   Setting2,
   Sms,
   User,
+  TaskSquare,
 } from 'iconsax-react-native';
 import React from 'react';
 import {
@@ -37,6 +38,11 @@ const DrawerCustom = ({navigation}: any) => {
       key: 'MyProfile',
       title: 'My Profile',
       icon: <User size={size} color={color} />,
+    },
+    {
+      key: 'MyTask',
+      title: 'My Task',
+      icon: <TaskSquare size={size} color={color} />,
     },
     {
       key: 'Message',
@@ -97,6 +103,13 @@ const DrawerCustom = ({navigation}: any) => {
           },
         });
         break;
+
+        case 'MyTask':
+        navigation.navigate('Tasks', {
+          screen: 'HomeTaskScreen',
+        });
+        break;
+
       default:
         console.log(key);
         break;

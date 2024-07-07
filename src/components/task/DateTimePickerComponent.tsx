@@ -29,7 +29,7 @@ const DateTimePickerComponent = (props: Props) => {
         <RowComponent
           onPress={() => setIsVisibleModalDateTime(true)}
           styles={[
-            globalStyles.inputContainer,
+            globalStyles.inputContainer_t,
             {marginTop: title ? 8 : 0, paddingVertical: 16},
           ]}>
           <TextComponent

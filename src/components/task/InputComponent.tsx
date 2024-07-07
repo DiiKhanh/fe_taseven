@@ -43,7 +43,7 @@ const InputComponent = (props: Props) => {
       {title && <TitleComponent text={title} />}
       <RowComponent
         styles={[
-          globalStyles.inputContainer,
+          globalStyles.inputContainer_t,
           {
             marginTop: title ? 8 : 0,
             minHeight: multible && numberOfLine ? 32 * numberOfLine : 32,
@@ -61,7 +61,7 @@ const InputComponent = (props: Props) => {
             paddingRight: affix ? 8 : 0,
           }}>
           <TextInput
-            style={[globalStyles.text, {margin: 0, padding: 0}]}
+            style={[globalStyles.text_t, {margin: 0, padding: 0}]}
             placeholder={placeholder ?? title ?? ''}
             placeholderTextColor={'#676767'}
             value={value}

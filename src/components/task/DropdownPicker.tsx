@@ -24,7 +24,7 @@ const DropdownPicker = (props: Props) => {
   const {title, items, selected, onSelect, multible} = props;
 
   const [isVisible, setIsVisible] = useState(false);
-  const [searckKey, setSearckKey] = useState('');
+  const [searchKey, setSearchKey] = useState('');
   const [results, setResults] = useState<SelectModel[]>([]);
   const [dataSelected, setDataSelected] = useState<string[]>([]);
 
@@ -33,16 +33,16 @@ const DropdownPicker = (props: Props) => {
   }, [isVisible, selected]);
 
   useEffect(() => {
-    if (!searckKey) {
+    if (!searchKey) {
       setResults([]);
     } else {
       const data = items.filter(element =>
-        element.label.toLowerCase().includes(searckKey.toLowerCase()),
+        element.label.toLowerCase().includes(searchKey.toLowerCase()),
       );
 
       setResults(data);
     }
-  }, [searckKey]);
+  }, [searchKey]);
 
   const handleSelectItem = (id: string) => {
     if (multible) {
@@ -106,7 +106,7 @@ const DropdownPicker = (props: Props) => {
       <RowComponent
         onPress={() => setIsVisible(true)}
         styles={[
-          globalStyles.inputContainer,
+          globalStyles.inputContainer_t,
           {marginTop: title ? 8 : 0, paddingVertical: 16},
         ]}>
         <View style={{flex: 1, paddingRight: 12}}>
@@ -129,7 +129,7 @@ const DropdownPicker = (props: Props) => {
         statusBarTranslucent>
         <View
           style={[
-            globalStyles.container,
+            globalStyles.container_t,
             {
               padding: 20,
               paddingTop: 60,
@@ -143,20 +143,20 @@ const DropdownPicker = (props: Props) => {
                 styles={{alignItems: 'center', justifyContent: 'center'}}>
                 <View style={{flex: 1, marginRight: 12}}>
                   <InputComponent
-                    value={searckKey}
-                    onChange={val => setSearckKey(val)}
+                    value={searchKey}
+                    onChange={val => setSearchKey(val)}
                     placeholder="Search..."
-                    prefix={<SearchNormal1 size={22} color={appColors.gray2_t} />}
+                    prefix={<SearchNormal1 size={20} color={appColors.gray2_t} />}
                     allowClear
                   />
                 </View>
                 <TouchableOpacity onPress={() => setIsVisible(false)}>
-                  <TextComponent text="Cancel" color="coral" flex={0} />
+                  <TextComponent text="Cancel" color="coral" flex={0}/>
                 </TouchableOpacity>
               </RowComponent>
             }
             style={{flex: 1}}
-            data={searckKey ? results : items}
+            data={searchKey ? results : items}
             renderItem={({item}) => (
               <RowComponent
                 onPress={() => handleSelectItem(item.value)}
@@ -164,7 +164,7 @@ const DropdownPicker = (props: Props) => {
                 styles={{paddingVertical: 16}}>
                 <TextComponent
                   size={16}
-                  text={item.label}
+                  text={`${item.label} (${item.email})`}
                   color={
                     dataSelected.includes(item.value) ? 'coral' : appColors.text_t
                   }

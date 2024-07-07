@@ -1,9 +1,7 @@
 import {
   View,
-  Text,
   StyleProp,
   ViewStyle,
-  Touchable,
   TouchableOpacity,
 } from 'react-native';
 import React, {ReactNode} from 'react';
@@ -27,7 +25,7 @@ const RowComponent = (props: Props) => {
   const {styles, justify, children, onPress} = props;
 
   const localStyle = [
-    globalStyles.row,
+    globalStyles.row_t,
     {
       justifyContent: justify ?? 'center',
     },

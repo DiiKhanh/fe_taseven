@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {
   ButtonComponent,
   ButtonImagePicker,
+  ChoiceLocation,
   ContainerComponent,
   DateTimePicker,
   DropdownPicker,
@@ -75,7 +76,6 @@ const AddEventScreen = ({navigation}: any) => {
       const res = await eventAPI.HandleEvent(api);
       if (res.data) {
         const items: SelectModel[] = [];
-
         const data = res.data;
         data.forEach((item: any) =>
           items.push({
@@ -87,7 +87,7 @@ const AddEventScreen = ({navigation}: any) => {
         setCategories(items);
       }
     } catch (error) {
-      console.log(error);
+      console.log('error get categories', error);
     }
   };
 
@@ -119,7 +119,6 @@ const AddEventScreen = ({navigation}: any) => {
               value: item.id,
             }),
         );
-
         setUsersSelects(items);
       }
     } catch (error) {
@@ -139,10 +138,10 @@ const AddEventScreen = ({navigation}: any) => {
       res.on(
         'state_changed',
         snap => {
-          // console.log(snap.bytesTransferred);
+          console.log(snap.bytesTransferred);
         },
         error => {
-          // console.log(error);
+          console.log(error);
         },
         () => {
           storage()
@@ -151,16 +150,16 @@ const AddEventScreen = ({navigation}: any) => {
             .then(url => {
               eventData.photoUrl = url;
 
-              handlePustEvent(eventData);
+              handlePushEvent(eventData);
             });
         },
       );
     } else {
-      handlePustEvent(eventData);
+      handlePushEvent(eventData);
     }
   };
 
-  const handlePustEvent = async (event: EventModel) => {
+  const handlePushEvent = async (event: EventModel) => {
     const api = '/add-new';
 
     setIsCreating(true);
@@ -169,7 +168,7 @@ const AddEventScreen = ({navigation}: any) => {
       event.endAt = DateTime.GetEventTime(event.date, event.endAt);
 
       const res = await eventAPI.HandleEvent(api, event, 'post');
-
+      console.log('res', res);
       setIsCreating(false);
       navigation.navigate('Explore', {
         screen: 'HomeScreen',
@@ -196,7 +195,7 @@ const AddEventScreen = ({navigation}: any) => {
   return (
     <ContainerComponent isScroll>
       <SectionComponent>
-        <TextComponent text="Add new" title />
+        <TextComponent text="Add New Event" title />
       </SectionComponent>
       <SectionComponent>
         {eventData.photoUrl || fileSelected ? (
@@ -276,7 +275,7 @@ const AddEventScreen = ({navigation}: any) => {
           value={eventData.locationTitle}
           onChange={val => handleChangeValue('locationTitle', val)}
         />
-        {/* <ChoiceLocation onSelect={val => handleLocation(val)} /> */}
+        <ChoiceLocation onSelect={val => handleLocation(val)} />
         <InputComponent
           placeholder="Price"
           allowClear
@@ -302,7 +301,7 @@ const AddEventScreen = ({navigation}: any) => {
       <SectionComponent>
         <ButtonComponent
           disable={errorsMess.length > 0}
-          text="Add New"
+          text="Add New Event"
           onPress={handleAddEvent}
           type="primary"
         />

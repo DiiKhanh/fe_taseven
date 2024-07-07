@@ -5,8 +5,9 @@ import {
   SearchNormal1,
   HambergerMenu,
 } from 'iconsax-react-native';
-import React from 'react';
-import {ActivityIndicator,  TouchableOpacity, View} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import firestore from '@react-native-firebase/firestore';
+import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
 import AvatarGroup from '../../components/task/AvatarGroup';
 import CardComponent from '../../components/task/CardComponent';
 import CardImageConponent from '../../components/task/CardImageConponent';
@@ -27,51 +28,101 @@ import {DateTime} from '../../utils/DateTime';
 import {add0ToNumber} from '../../utils/add0ToNumber';
 import { AuthState, authSelector } from '../../redux/reducers/authReducer';
 import { useSelector } from 'react-redux';
+import { TaskModel } from '../../models/TaskModel';
+import { useLinkTo } from '@react-navigation/native';
+import { NotificationTaskModel } from '../../models/NotificationModel';
+import { HandleNotification } from '../../utils/handleNotification';
+import messaging from '@react-native-firebase/messaging';
 
 const date = new Date();
-
-const unReadNotifications = [1, 2];
 
 const HomeTaskScreen = ({navigation}: any) => {
 
   const auth: AuthState = useSelector(authSelector);
+  const linkTo = useLinkTo();
 
-  const tasks = [
-    {
-    id: '123',
-    uids: ['1234'],
-    title: 'task',
-    dueDate: date,
-    progress: 0.7,
-    description: '12131341',
-    },
-    {
-      uids: ['123112'],
-      title: 'task1',
-      dueDate: date,
-      progress: 1,
-      description: '12131341',
-      },
-      {
-        uids: ['123213234'],
-        title: 'task2',
-        dueDate: date,
-        progress: 0.2,
-        description: '12131341',
-        },
-  ];
-  const urgentTask = [{
-    id: 123,
-    title: 'asdsad',
-    progress: 0.4,
-  }];
+  const [isLoading, setIsLoading] = useState(false);
+  const [tasks, setTasks] = useState<TaskModel[]>([]);
+  const [urgentTask, setUrgentTask] = useState<TaskModel[]>([]);
+  const [unReadNotifications, setUnReadNotifications] = useState<
+    NotificationTaskModel[]
+  >([]);
 
-  const isLoading = false;
+  useEffect(() => {
+    getTasks();
+    HandleNotification.checkNotificationPermission();
+    messaging().onMessage(() => {
+      handleGetUnReadNotifications();
+    });
+
+    messaging()
+      .getInitialNotification()
+      .then((mess: any) => {
+        const data = mess?.data;
+        const taskId = data?.taskId;
+
+        // linkTo(`/task-detail/${taskid}`);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (tasks.length > 0) {
+      const items = tasks.filter(element => element.isUrgent);
+
+      setUrgentTask(items);
+    }
+  }, [tasks]);
+
+  const getTasks = () => {
+    setIsLoading(true);
+
+    firestore()
+      .collection('tasks')
+      .where('uids', 'array-contains', auth?.id)
+      .onSnapshot(snap => {
+        if (snap.empty) {
+          console.log('tasks not found!');
+        } else {
+          const items: TaskModel[] = [];
+          snap.forEach((item: any) => {
+            items.push({
+              id: item.id,
+              ...item.data(),
+            });
+          });
+
+          setTasks(items);
+        }
+        setIsLoading(false);
+      });
+  };
+
   const handleMoveToTaskDetail = (id?: string, color?: string) =>
     navigation.navigate('TaskDetail', {
       id,
       color,
     });
+
+    const handleGetUnReadNotifications = () => {
+      firestore()
+        .collection('notifications')
+        .where('taskDetail.uids', 'array-contains', auth?.id)
+        .where('isRead', '==', false)
+        .onSnapshot(snap => {
+          if (!snap.empty) {
+            const items: NotificationTaskModel[] = [];
+            snap.forEach((item: any) => {
+              items.push({
+                id: item.id,
+                ...item.data(),
+              });
+            });
+            setUnReadNotifications(items);
+          } else {
+            setUnReadNotifications([]);
+          }
+        });
+    };
 
   return (
     <View style={{flex: 1}}>
@@ -107,30 +158,32 @@ const HomeTaskScreen = ({navigation}: any) => {
         <SectionComponent>
           <RowComponent>
             <View style={{flex: 1}}>
-              <TextComponent text={`hi, ${auth?.username}`} />
-              <TitleComponent text="Be Productive today" />
+              <TextComponent text={`Hi, ${auth?.username}`} />
+              <TitleComponent text="Be Productive Today" />
             </View>
           </RowComponent>
         </SectionComponent>
+
         <SectionComponent>
-          <RowComponent
+        <RowComponent
             styles={[globalStyles.inputContainer_t]}
-            onPress={() => navigation.navigate('ListTasks', {
-            tasks })
-            }
-            >
+            onPress={() =>
+              navigation.navigate('ListTasks', {
+                tasks,
+              })
+            }>
             <TextComponent color="#f2f2f2" text="Search task" />
             <SearchNormal1 size={20} color={appColors.desc} />
           </RowComponent>
         </SectionComponent>
         <SectionComponent>
-          <CardComponent>
-            <RowComponent
+          <CardComponent
             onPress={() =>
-            navigation.navigate('ListTasks', {
-              tasks,
-            })
+              navigation.navigate('ListTasks', {
+                tasks,
+              })
             }>
+            <RowComponent>
               <View style={{flex: 1}}>
                 <TitleComponent text="Task progress" />
                 <TextComponent
@@ -184,8 +237,10 @@ const HomeTaskScreen = ({navigation}: any) => {
             <RowComponent styles={{alignItems: 'flex-start'}}>
               <View style={{flex: 1}}>
                 {tasks[0] && (
-                  <CardImageConponent onPress={() => handleMoveToTaskDetail(tasks[0].id as string)
-                  }>
+                  <CardImageConponent
+                    onPress={() =>
+                      handleMoveToTaskDetail(tasks[0].id as string)
+                    }>
                     <TouchableOpacity
                       onPress={() =>
                         navigation.navigate('AddTaskScreen', {
@@ -218,7 +273,7 @@ const HomeTaskScreen = ({navigation}: any) => {
                     {tasks[0].dueDate && (
                       <TextComponent
                         text={`Due ${DateTime.DateString(
-                          tasks[0].dueDate,
+                          tasks[0].dueDate.toDate(),
                         )}`}
                         size={12}
                         color={appColors.desc}
@@ -231,7 +286,14 @@ const HomeTaskScreen = ({navigation}: any) => {
               <SpaceComponent width={16} />
               <View style={{flex: 1}}>
                 {tasks[1] && (
-                  <CardImageConponent color="rgba(33, 150, 243, 0.9)">
+                  <CardImageConponent
+                    onPress={() =>
+                      handleMoveToTaskDetail(
+                        tasks[1].id as string,
+                        'rgba(33, 150, 243, 0.9)',
+                      )
+                    }
+                    color="rgba(33, 150, 243, 0.9)">
                     <TouchableOpacity
                       onPress={() =>
                         navigation.navigate('AddTaskScreen', {
@@ -257,7 +319,14 @@ const HomeTaskScreen = ({navigation}: any) => {
 
                 <SpaceComponent height={16} />
                 {tasks[2] && (
-                  <CardImageConponent color="rgba(18, 181, 22, 0.9)">
+                  <CardImageConponent
+                    onPress={() =>
+                      handleMoveToTaskDetail(
+                        tasks[2].id as string,
+                        'rgba(18, 181, 22, 0.9)',
+                      )
+                    }
+                    color="rgba(18, 181, 22, 0.9)">
                     <TouchableOpacity
                       onPress={() =>
                         navigation.navigate('AddTaskScreen', {
@@ -293,6 +362,7 @@ const HomeTaskScreen = ({navigation}: any) => {
           {urgentTask.length > 0 &&
             urgentTask.map(item => (
               <CardComponent
+                onPress={() => handleMoveToTaskDetail(item.id)}
                 key={`urgentTask${item.id}`}
                 styles={{marginBottom: 12}}>
                 <RowComponent>

@@ -1,4 +1,5 @@
 import {Slider} from '@miblanchard/react-native-slider';
+import firestore from '@react-native-firebase/firestore';
 import {
   AddSquare,
   ArrowLeft2,
@@ -16,9 +17,9 @@ import {
   View,
 } from 'react-native';
 import AvatarGroup from '../../components/task/AvatarGroup';
-import ButtonComponent from '../../components/ButtonComponent';
+import ButtonComponent from '../../components/task/ButtonComponent';
 import CardComponent from '../../components/task/CardComponent';
-import RowComponent from '../../components/RowComponent';
+import RowComponent from '../../components/task/RowComponent';
 import SectionComponent from '../../components/task/SectionComponent';
 import SpaceComponent from '../../components/task/SpaceComponent';
 import TextComponent from '../../components/task/TextComponent';
@@ -34,19 +35,10 @@ import ModalAddSubTask from '../../modals/ModalAddSubTask';
 import { useSelector } from 'react-redux';
 import { authSelector } from '../../redux/reducers/authReducer';
 
-const taskDetail = {
-  title: '123',
-  id: '123',
-  start: 12,
-  end: 1,
-  dueDate: 1,
-  description: 'description 123',
-  uids: ['1234', '24'],
-};
-
 const TaskDetail = ({navigation, route}: any) => {
+  const user  = useSelector(authSelector);
   const {id, color}: {id: string; color?: string} = route.params;
-  // const [taskDetail, setTaskDetail] = useState<TaskModel>();
+  const [taskDetail, setTaskDetail] = useState<TaskModel>();
   const [progress, setProgress] = useState(0);
   const [attachments, setAttachments] = useState<Attachment[]>([]);
   const [subTasks, setSubTasks] = useState<SubTask[]>([]);
@@ -54,31 +46,29 @@ const TaskDetail = ({navigation, route}: any) => {
   const [isVisibleModalSubTask, setIsVisibleModalSubTask] = useState(false);
   const [isUrgent, setIsUrgent] = useState(false);
 
-  const user  = useSelector(authSelector);
-
   useEffect(() => {
     getTaskDetail();
     getSubTaskById();
   }, [id]);
 
-  // useEffect(() => {
-  //   if (taskDetail) {
-  //     setProgress(taskDetail.progress ?? 0);
-  //     setAttachments(taskDetail.attachments);
-  //     setIsUrgent(taskDetail.isUrgent);
-  //   }
-  // }, [taskDetail]);
+  useEffect(() => {
+    if (taskDetail) {
+      setProgress(taskDetail.progress ?? 0);
+      setAttachments(taskDetail.attachments);
+      setIsUrgent(taskDetail.isUrgent);
+    }
+  }, [taskDetail]);
 
-  // useEffect(() => {
-  //   if (
-  //     progress !== taskDetail?.progress ||
-  //     attachments.length !== taskDetail.attachments.length
-  //   ) {
-  //     setIsChanged(true);
-  //   } else {
-  //     setIsChanged(false);
-  //   }
-  // }, [progress, taskDetail, attachments]);
+  useEffect(() => {
+    if (
+      progress !== taskDetail?.progress ||
+      attachments.length !== taskDetail.attachments.length
+    ) {
+      setIsChanged(true);
+    } else {
+      setIsChanged(false);
+    }
+  }, [progress, taskDetail, attachments]);
 
   useEffect(() => {
     if (subTasks.length > 0) {
@@ -91,66 +81,65 @@ const TaskDetail = ({navigation, route}: any) => {
   }, [subTasks]);
 
   const getTaskDetail = () => [
-
-    // firestore()
-    //   .doc(`tasks/${id}`)
-    //   .onSnapshot((snap: any) => {
-    //     if (snap.exists) {
-    //       setTaskDetail({
-    //         id,
-    //         ...snap.data(),
-    //       });
-    //     }
-    //   }),
+    firestore()
+      .doc(`tasks/${id}`)
+      .onSnapshot((snap: any) => {
+        if (snap.exists) {
+          setTaskDetail({
+            id,
+            ...snap.data(),
+          });
+        }
+      }),
   ];
 
   const handleUpdateUrgentState = () => {
-    // firestore().doc(`tasks/${id}`).update({
-    //   isUrgent: !isUrgent,
-    //   updatedAt: Date.now(),
-    // });
+    firestore().doc(`tasks/${id}`).update({
+      isUrgent: !isUrgent,
+      updatedAt: Date.now(),
+    });
   };
 
   const getSubTaskById = () => {
-    // firestore()
-    //   .collection('subTasks')
-    //   .where('taskId', '==', id)
-    //   .onSnapshot(snap => {
-    //     if (snap.empty) {
-    //       console.log('Data not found');
-    //     } else {
-    //       const items: SubTask[] = [];
-    //       snap.forEach((item: any) => {
-    //         items.push({
-    //           id: item.id,
-    //           ...item.data(),
-    //         });
-    //       });
-    //       setSubTasks(items);
-    //     }
-    //   });
+    firestore()
+      .collection('subTasks')
+      .where('taskId', '==', id)
+      .onSnapshot(snap => {
+        if (snap.empty) {
+          console.log('Data not found');
+        } else {
+          const items: SubTask[] = [];
+          snap.forEach((item: any) => {
+            items.push({
+              id: item.id,
+              ...item.data(),
+            });
+          });
+          setSubTasks(items);
+        }
+      });
   };
 
   const handleUpdateTask = async () => {
-    // const data = {...taskDetail, progress, attachments, updatedAt: Date.now()};
+    const data = {...taskDetail, progress, attachments, updatedAt: Date.now()};
 
-    // await firestore()
-    //   .doc(`tasks/${id}`)
-    //   .update(data)
-    //   .then(() => {
-    //     Alert.alert('Task updated');
-    //   })
-    //   .catch(error => console.log(error));
+    await firestore()
+      .doc(`tasks/${id}`)
+      .update(data)
+      .then(() => {
+        Alert.alert('Task updated');
+      })
+      .catch(error => console.log(error));
   };
 
-  const handleUpdateSubTask = async (id: string, isCompleted: boolean) => {
-    // try {
-    //   await firestore()
-    //     .doc(`subTasks/${id}`)
-    //     .update({isCompleted: !isCompleted});
-    // } catch (error) {
-    //   console.log(error);
-    // }
+  const handleUpdateSubTask = async (idTask: string, isCompleted: boolean) => {
+    try {
+      await firestore()
+        .doc(`subTasks/${idTask}`)
+        .update({isCompleted: !isCompleted});
+    } catch (error) {
+      console.log(error);
+    }
   };
   const handleRemoveTask = () => {
     Alert.alert('Confirm', 'Are you sure, you want delete task?', [
@@ -162,30 +151,30 @@ const TaskDetail = ({navigation, route}: any) => {
       {
         text: 'Delete',
         style: 'destructive',
-        // onPress: async () => {
-        //   await firestore()
-        //     .doc(`tasks/${id}`)
-        //     .delete()
-        //     .then(() => {
-        //       taskDetail?.uids.forEach(id => {
-        //         HandleNotification.SendNotification({
-        //           title: 'Delete task',
-        //           body: `You task deleted by ${user?.email}`,
-        //           taskId: '',
-        //           memberId: id,
-        //         });
-        //       });
+        onPress: async () => {
+          await firestore()
+            .doc(`tasks/${id}`)
+            .delete()
+            .then(() => {
+              // taskDetail?.uids.forEach(id => {
+              //   HandleNotification.SendNotification({
+              //     title: 'Delete task',
+              //     body: `You task deleted by ${user?.email}`,
+              //     taskId: '',
+              //     memberId: id,
+              //   });
+              // });
+              console.log(user.email);
 
-        //       navigation.goBack();
-        //     })
-        //     .catch(error => {
-        //       console.log(error);
-        //     });
-        // },
+              navigation.goBack();
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        },
       },
     ]);
   };
-
 
   return taskDetail ? (
     <>
@@ -227,10 +216,9 @@ const TaskDetail = ({navigation, route}: any) => {
                 {taskDetail.end && taskDetail.start && (
                   <TextComponent
                     flex={0}
-                    text="123"
-                    // text={`${DateTime.GetHour(
-                    //   taskDetail.start?.toDate(),
-                    // )} - ${DateTime.GetHour(taskDetail.end?.toDate())}`}
+                    text={`${DateTime.GetHour(
+                      taskDetail.start?.toDate(),
+                    )} - ${DateTime.GetHour(taskDetail.end?.toDate())}`}
                   />
                 )}
               </RowComponent>
@@ -247,7 +235,7 @@ const TaskDetail = ({navigation, route}: any) => {
                   <TextComponent
                     flex={0}
                     text={
-                      // DateTime.DateString(taskDetail.dueDate.toDate()) ??
+                      DateTime.DateString(taskDetail.dueDate.toDate()) ??
                       ''
                     }
                   />
@@ -256,7 +244,6 @@ const TaskDetail = ({navigation, route}: any) => {
               <View
                 style={{
                   flex: 1,
-
                   alignItems: 'flex-end',
                 }}>
                 <AvatarGroup uids={taskDetail.uids} />
@@ -405,23 +392,18 @@ const TaskDetail = ({navigation, route}: any) => {
               </CardComponent>
             ))}
         </SectionComponent>
-        <SectionComponent>
-          <RowComponent onPress={handleRemoveTask}>
-            <TextComponent text="Delete task" color="red" flex={0} />
+        <SectionComponent styles={{gap: 10}}>
+          <RowComponent >
+            <ButtonComponent text="Delete task" onPress={handleRemoveTask} color="red"/>
           </RowComponent>
+          {
+            isChanged &&
+            <RowComponent>
+              <ButtonComponent text="Update" onPress={handleUpdateTask} />
+            </RowComponent>
+          }
         </SectionComponent>
       </ScrollView>
-      {isChanged && (
-        <View
-          style={{
-            position: 'absolute',
-            bottom: 20,
-            right: 20,
-            left: 20,
-          }}>
-          <ButtonComponent text="Update" onPress={handleUpdateTask} />
-        </View>
-      )}
 
       <ModalAddSubTask
         visible={isVisibleModalSubTask}

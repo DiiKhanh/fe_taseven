@@ -15,6 +15,16 @@ import DateTimePicker from './DateTimePicker';
 import UserComponent from './UserComponent';
 import AvatarGroup from './AvatarGroup';
 import NotificationItem from './NotificationItem';
+import ChoiceLocation from './ChoiceLocation';
+import TabBarComponent from './TabBarComponent';
+import InputSearchMap from './InputSearchMap';
+import CategoriesList from './CategoriesList';
+import TagComponent from './TagComponent';
+import CardComponent from './CardComponent';
+import MakerCustom from './MakerCustom';
+import EventItem from './EventItem';
+import RadioButtons from './RadioButtons';
+import ListEventComponent from './ListEventComponent';
 
 export {
   SpaceComponent,
@@ -34,4 +44,14 @@ export {
   UserComponent,
   AvatarGroup,
   NotificationItem,
+  ChoiceLocation,
+  TabBarComponent,
+  InputSearchMap,
+  CategoriesList,
+  TagComponent,
+  CardComponent,
+  MakerCustom,
+  EventItem,
+  RadioButtons,
+  ListEventComponent,
 };

@@ -28,7 +28,7 @@ const Container = (props: Props) => {
 
         <RowComponent
           styles={{
-            marginTop: 20,
+            marginTop: 24,
             paddingHorizontal: 16,
             paddingBottom: 16,
             justifyContent: 'center',
@@ -36,7 +36,7 @@ const Container = (props: Props) => {
           }}>
           {back && (
             <TouchableOpacity onPress={() => navigation.goBack()}>
-              <ArrowLeft2 size={24} color={appColors.text_t} />
+              <ArrowLeft2 size={24} color={appColors.text_t}/>
             </TouchableOpacity>
           )}
           <View style={{flex: 1, zIndex: -1}}>

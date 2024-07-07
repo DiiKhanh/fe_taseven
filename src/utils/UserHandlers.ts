@@ -26,7 +26,7 @@ export class UserHandle {
       const res = await userAPI.HandleUser(api);
       dispatch(updateFollowing(res.data));
     } catch (error) {
-      console.log();
+      console.log(error);
     }
   };
 }

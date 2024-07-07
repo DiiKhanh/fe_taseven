@@ -13,6 +13,10 @@ import TaskDetail from './home-task/TaskDetail';
 import ListTasks from './home-task/ListTasks';
 import TaskNotifications from './home-task/TaskNotifications';
 import AddEventScreen from './AddEventScreen';
+import MapScreen from './maps/MapScreen';
+import EventsScreen from './events/EventsScreen';
+import NotificationsScreen from './NotificationsScreen';
+import SearchEvents from './events/SearchEvents';
 
 export {
   HomeScreen,
@@ -30,4 +34,8 @@ export {
   TaskDetail,
   ListTasks,
   TaskNotifications,
+  MapScreen,
+  EventsScreen,
+  NotificationsScreen,
+  SearchEvents,
 };

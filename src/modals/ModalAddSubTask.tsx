@@ -7,6 +7,7 @@ import ButtonComponent from '../components/task/ButtonComponent';
 import {appColors} from '../constants/appColors';
 import TitleComponent from '../components/task/TitleComponent';
 import InputComponent from '../components/task/InputComponent';
+import firestore from '@react-native-firebase/firestore';
 
 interface Props {
   visible: boolean;
@@ -36,7 +37,7 @@ const ModalAddSubTask = (props: Props) => {
 
     setIsLoading(true);
     try {
-      // await firestore().collection('subTasks').add(data);
+      await firestore().collection('subTasks').add(data);
       console.log('Done');
       setIsLoading(false);
       handleCloseModal();

@@ -1,4 +1,3 @@
-// n
 import GeoLocation from '@react-native-community/geolocation';
 import {ArrowLeft2} from 'iconsax-react-native';
 import React, {useEffect, useState} from 'react';
@@ -22,7 +21,6 @@ import {globalStyles} from '../../styles/globalStyles';
 import {useIsFocused} from '@react-navigation/native';
 import {LoadingModal} from '../../modals';
 
-
 const MapScreen = ({navigation}: any) => {
   const [currentLocation, setCurrentLocation] = useState<{
     lat: number;
@@ -31,10 +29,6 @@ const MapScreen = ({navigation}: any) => {
   const [events, setEvents] = useState<EventModel[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const isFocused = useIsFocused();
-
-
-  //eventhub://app/detail/12345
-
 
   useEffect(() => {
     GeoLocation.getCurrentPosition(
@@ -47,17 +41,15 @@ const MapScreen = ({navigation}: any) => {
         }
       },
       (error: any) => {
-        console.log(error);
+        console.log('map screen err', error);
       },
       {},
     );
   }, []);
 
-
   useEffect(() => {
     currentLocation && isFocused && getNearbyEvents();
   }, [currentLocation, isFocused]);
-
 
   const getNearbyEvents = async (categoryId?: string) => {
     setIsLoading(true);
@@ -65,24 +57,19 @@ const MapScreen = ({navigation}: any) => {
       currentLocation?.long
     }&distance=${5}${categoryId ? `&categoryId=${categoryId}` : ''}`;
 
-
     try {
       const res = await eventAPI.HandleEvent(api);
-
-
       setEvents(res.data);
       setIsLoading(false);
     } catch (error) {
-      console.log(error);
+      console.log('getNearbyEvents error', error);
       setIsLoading(false);
     }
   };
 
-
   return (
     <View style={{flex: 1}}>
       <StatusBar barStyle={'dark-content'} />
-
 
       {currentLocation ? (
         <MapView
@@ -125,7 +112,6 @@ const MapScreen = ({navigation}: any) => {
       ) : (
         <></>
       )}
-
 
       <View
         style={{
@@ -187,11 +173,9 @@ const MapScreen = ({navigation}: any) => {
         />
       </View>
 
-
       <LoadingModal visible={isLoading} />
     </View>
   );
 };
-
 
 export default MapScreen;

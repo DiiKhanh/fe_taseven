@@ -1,3 +1,4 @@
+import firestore from '@react-native-firebase/firestore';
 import React, {useEffect, useState} from 'react';
 import {Alert, View} from 'react-native';
 import ButtonComponent from '../../components/task/ButtonComponent';
@@ -15,6 +16,7 @@ import {SelectModel} from '../../models/SelectModel';
 import {Attachment, TaskModel} from '../../models/TaskModel';
 import { useSelector } from 'react-redux';
 import { authSelector } from '../../redux/reducers/authReducer';
+import userAPI from '../../apis/userApi';
 
 
 const initValue: TaskModel = {
@@ -30,6 +32,12 @@ const initValue: TaskModel = {
   isUrgent: false,
 };
 
+interface ItemResponse {
+  email: string;
+  id: string;
+  username: string;
+}
+
 const AddTaskScreen = ({navigation, route}: any) => {
   const {editable, task}: {editable: boolean; task?: TaskModel} = route.params;
 
@@ -37,11 +45,14 @@ const AddTaskScreen = ({navigation, route}: any) => {
   const [usersSelect, setUsersSelect] = useState<SelectModel[]>([]);
   const [attachments, setAttachments] = useState<Attachment[]>([]);
 
-  const user  = useSelector(authSelector);
-
+  const user = useSelector(authSelector);
 
   useEffect(() => {
-    user && setTaskDetail({...taskDetail, uids: [user.uids]});
+    handleGetAllUsers();
+  }, []);
+
+  useEffect(() => {
+    user && setTaskDetail({...taskDetail, uids: [user.id]});
   }, [user]);
 
   useEffect(() => {
@@ -54,6 +65,29 @@ const AddTaskScreen = ({navigation, route}: any) => {
       });
   }, [task]);
 
+  const handleGetAllUsers = async () => {
+    const api = '/get-all';
+
+    try {
+      const res = await userAPI.HandleUser(api);
+      if (res.data.length === 0) {
+        console.log('user empty');
+      } else {
+        const items: SelectModel[] = [];
+        res.data.forEach((item:ItemResponse) => {
+          items.push({
+            label: item.username,
+            value: item.id,
+            email: item.email,
+          });
+        });
+        setUsersSelect(items);
+      }
+    } catch (error) {
+      console.log('err add task load user', error);
+    }
+  };
+
   const handleChangeValue = (id: string, value: string | string[] | Date) => {
     const item: any = {...taskDetail};
 
@@ -63,6 +97,7 @@ const AddTaskScreen = ({navigation, route}: any) => {
   };
 
   const handleAddNewTask = async () => {
+    // add new task
     if (user) {
       const data = {
         ...taskDetail,
@@ -72,12 +107,86 @@ const AddTaskScreen = ({navigation, route}: any) => {
       };
 
       if (task) {
-
+        await firestore()
+          .doc(`tasks/${task.id}`)
+          .update(data)
+          .then(() => {
+            if (usersSelect.length > 0) {
+              usersSelect.forEach(member => {
+                member.value !== user.id
+                &&
+                  handleSendInviteNotification({
+                    title: 'Update task',
+                    body: `Your task updated by ${user?.email}`,
+                    taskId: task?.id ?? '',
+                    memberId: member.value,
+                  });
+              });
+            }
+            navigation.goBack();
+          });
       } else {
-
+        await firestore()
+          .collection('tasks')
+          .add(data)
+          .then(() => {
+            if (usersSelect.length > 0) {
+              usersSelect.forEach(member => {
+                member.value !== user.id
+                &&
+                handleSendInviteNotification({
+                    title: 'New task',
+                    body: `You have a new task asign by ${user?.email}`,
+                    taskId: data.id,
+                    memberId: member.value,
+                  });
+              });
+            }
+            navigation.goBack();
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       }
     } else {
       Alert.alert('You not login!!!');
+    }
+  };
+
+  const handleSendInviteNotification = async ({ eventId, taskId, memberId }:any) => {
+    if (usersSelect.length > 0) {
+      const api = '/send-invite';
+
+      try {
+        await userAPI.HandleUser(
+          api,
+          {
+            ids: usersSelect,
+            eventId, taskId, memberId,
+          },
+          'post',
+        );
+
+        const data: any = {
+          from: user.id,
+          createdAt: Date.now(),
+          content: 'Invite A New Task',
+          taskDetail,
+          isRead: false,
+        };
+
+        usersSelect.forEach(async id => {
+          await firestore()
+            .collection('notifications')
+            .add({...data, uid: id.value});
+
+          console.log('Created notifition done!');
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      Alert.alert('', 'Please select user want to invite!!');
     }
   };
 

@@ -1,5 +1,4 @@
-import {useIsFocused} from '@react-navigation/native';
-import {Cake, SearchNormal1, Sort} from 'iconsax-react-native';
+import {SearchNormal1, Sort} from 'iconsax-react-native';
 import {debounce} from 'lodash';
 import React, {useEffect, useState} from 'react';
 import {TextInput, TouchableOpacity, View} from 'react-native';
@@ -8,7 +7,6 @@ import {
   CircleComponent,
   ContainerComponent,
   ListEventComponent,
-  LoadingComponent,
   RowComponent,
   SectionComponent,
   SpaceComponent,

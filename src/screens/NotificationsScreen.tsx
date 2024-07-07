@@ -1,14 +1,11 @@
-// d
 import React, {useEffect, useState} from 'react';
-import {ActivityIndicator, FlatList, Image, Text, View} from 'react-native';
+import {ActivityIndicator, FlatList, Image} from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import {useSelector} from 'react-redux';
 import {
-  AvatarComponent,
   ButtonComponent,
   ContainerComponent,
   NotificationItem,
-  RowComponent,
   SectionComponent,
   SpaceComponent,
   TextComponent,
@@ -21,15 +18,12 @@ import firestore from '@react-native-firebase/firestore';
 import {NotificationModel} from '../models/NotificationModel';
 import {LoadingModal} from '../modals';
 
-
 const NotificationsScreen = () => {
   const [notifications, setNotifications] = useState<NotificationModel[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
 
-
   const user = useSelector(authSelector);
-
 
   useEffect(() => {
     setIsLoading(true);
@@ -43,7 +37,6 @@ const NotificationsScreen = () => {
         } else {
           const items: any = [];
 
-
           snap.forEach(item =>
             items.push({
               id: item.id,
@@ -51,23 +44,20 @@ const NotificationsScreen = () => {
             }),
           );
 
-
           setNotifications(items);
           setIsLoading(false);
         }
       });
   }, []);
 
-
   const handleChecktoReadAllNotification = () => {
     setIsUpdating(true);
     try {
       notifications.forEach(async item => {
         await firestore().collection('notifcation').doc(item.id).update({
-          isRead: true,
+          idRead: true,
         });
       });
-
 
       setIsUpdating(false);
     } catch (error) {
@@ -75,7 +65,6 @@ const NotificationsScreen = () => {
       setIsUpdating(false);
     }
   };
-
 
   return (
     <ContainerComponent
@@ -102,7 +91,7 @@ const NotificationsScreen = () => {
           <FlatList
             style={{paddingTop: 20}}
             data={notifications}
-            renderItem={({item, index}) => (
+            renderItem={({item}) => (
               <NotificationItem item={item} key={item.id} />
             )}
           />
@@ -126,7 +115,7 @@ const NotificationsScreen = () => {
             size={16}
             color="#344B67"
             styles={{textAlign: 'center'}}
-            text="Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor"
+            text="Currently you have no announcements about the Event"
           />
         </SectionComponent>
       )}
@@ -134,6 +123,5 @@ const NotificationsScreen = () => {
     </ContainerComponent>
   );
 };
-
 
 export default NotificationsScreen;

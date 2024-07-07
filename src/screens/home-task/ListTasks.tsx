@@ -16,19 +16,19 @@ const ListTasks = ({navigation, route}: any) => {
   const [searchKey, setSearchKey] = useState('');
   const [results, setResults] = useState<TaskModel[]>([]);
 
-  // useEffect(() => {
-  //   if (!searchKey) {
-  //     setResults([]);
-  //   } else {
-  //     const items = tasks.filter(element =>
-  //       replaceName(element.title)
-  //         .toLowerCase()
-  //         .includes(replaceName(searchKey).toLowerCase()),
-  //     );
+  useEffect(() => {
+    if (!searchKey) {
+      setResults([]);
+    } else {
+      const items = tasks.filter(element =>
+        replaceName(element.title)
+          .toLowerCase()
+          .includes(replaceName(searchKey).toLowerCase()),
+      );
 
-  //     setResults(items);
-  //   }
-  // }, [searchKey]);
+      setResults(items);
+    }
+  }, [searchKey]);
 
   return (
     <Container back>
@@ -47,7 +47,7 @@ const ListTasks = ({navigation, route}: any) => {
         data={searchKey ? results : tasks}
         ListEmptyComponent={
           <SectionComponent>
-            <TextComponent text="Data not found!!!" />
+            <TextComponent text="Task Not Found!!" />
           </SectionComponent>
         }
         renderItem={({item}) => (
