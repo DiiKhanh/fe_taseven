@@ -20,6 +20,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {
   CategoriesList,
   CircleComponent,
+  EventItem,
   LoadingComponent,
   RowComponent,
   SectionComponent,
@@ -32,14 +33,18 @@ import {appColors} from '../../constants/appColors';
 import {fontFamilies} from '../../constants/fontFamilies';
 import {globalStyles} from '../../styles/globalStyles';
 import NetInfo from '@react-native-community/netinfo';
+import eventAPI from '../../apis/eventApi';
+import { EventModel } from '../../models/EventModel';
 
 
 const HomeScreen = ({navigation}: any) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isOnline, setIsOnline] = useState<boolean>();
+  const [eventData, setEventData] = useState<EventModel[]>([]);
 
   useEffect(() => {
     checkNetWork();
+    getEventsData();
   }, []);
 
   const checkNetWork = () => {
@@ -48,21 +53,22 @@ const HomeScreen = ({navigation}: any) => {
     });
   };
 
-  const events = [{
-    title: 'International Band Music Concert',
-    description:
-      'Enjoy your favorite dishe and a lovely your friends and family and have a great time. Food from local food trucks will be available for purchase.',
-    location: {
-      title: 'Gala Convention Center',
-      address: '36 Guild Street London, UK',
-    },
-    imageUrl: '',
-    users: [''],
-    authorId: '',
-    startAt: Date.now(),
-    endAt: Date.now(),
-    date: Date.now(),
-  }];
+  const getEventsData = async () => {
+    const api = '/get-events';
+    try {
+      const res = await eventAPI.HandleEvent(api);
+
+      const data = res.data;
+
+      const items: EventModel[] = [];
+
+      data.forEach((item: any) => items.push(item));
+
+      setEventData(items);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <View style={[globalStyles.container]}>
@@ -170,14 +176,6 @@ const HomeScreen = ({navigation}: any) => {
             marginTop: Platform.OS === 'ios' ? 22 : 18,
           },
         ]}>
-        {/* <SectionComponent>
-          <TouchableOpacity>
-            <TextComponent text="Fixdata" />
-          </TouchableOpacity>
-        </SectionComponent>
-        <SectionComponent styles={{paddingHorizontal: 0, paddingTop: 24}}>
-            <LoadingComponent isLoading={isLoading} values={3} />
-        </SectionComponent> */}
         <SectionComponent styles={{paddingHorizontal: 0, paddingTop: 24}}>
           <TabBarComponent
             title="Upcoming Events"
@@ -188,20 +186,17 @@ const HomeScreen = ({navigation}: any) => {
               })
             }
           />
-          {events.length > 0 ? (
+          {eventData.length > 0 ? (
             <FlatList
               showsHorizontalScrollIndicator={false}
               horizontal
-              data={events}
+              data={eventData}
               renderItem={({item, index}) => (
-                // <EventItem key={`event${index}`} item={item} type="card" />
-                <Text>
-                  123
-                </Text>
+                <EventItem key={`event${index}`} item={item} type="card" />
               )}
             />
           ) : (
-            <LoadingComponent isLoading={isLoading} values={events.length} />
+            <LoadingComponent isLoading={isLoading} values={eventData.length} />
           )}
         </SectionComponent>
         <SectionComponent>

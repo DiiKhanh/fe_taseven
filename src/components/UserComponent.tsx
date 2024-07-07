@@ -26,7 +26,7 @@ const UserComponent = (props: Props) => {
 
 
   const getProfile = async () => {
-    const api = `/get-profile?uid=${userId}`;
+    const api = `/get-profile?id=${userId}`;
 
 
     try {

@@ -6,6 +6,7 @@ export const appInfo = {
     HEIGHT: Dimensions.get('window').height,
   },
   BASE_URL: 'https://server-taseven.vercel.app',
+  domain: 'https://devtogerther.netlify.app',
   GoogleApiKey: 'AIzaSyCbtwJ3e1wGs0RcFkgQPtaLwg0P4XxkELA',
   monthNames: [
     'January',

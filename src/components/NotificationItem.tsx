@@ -39,7 +39,7 @@ const NotificationItem = (props: Props) => {
     getUserDetail();
   }, [item.from]);
   const getUserDetail = async () => {
-    const api = `/get-profile?uid=${item.from}`;
+    const api = `/get-profile?id=${item.from}`;
     setIsLoading(true);
     try {
       const res: any = await userAPI.HandleUser(api);
