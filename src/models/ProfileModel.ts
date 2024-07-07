@@ -8,4 +8,7 @@ export interface ProfileModel {
   fullname: string;
   filename: string;
   type?: 'Organizer' | 'Personal' | undefined;
+  following: string[];
+  uid: string;
+  interests?: string[];
 }

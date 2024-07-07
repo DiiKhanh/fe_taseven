@@ -12,7 +12,6 @@ import {
   RowComponent,
   SectionComponent,
   TextComponent,
-  UserComponent,
 } from '../components';
 import {appColors} from '../constants/appColors';
 import {fontFamilies} from '../constants/fontFamilies';
