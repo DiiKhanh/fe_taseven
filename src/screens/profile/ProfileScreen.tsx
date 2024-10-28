@@ -69,9 +69,10 @@ const ProfileScreen = ({navigation, route}: any) => {
 
     try {
       const res = await userAPI.HandleUser(api);
+      console.log(res);
       setUserFollowers(res.data);
     } catch (error) {
-      console.log();
+      console.log(error);
     }
   };
 
