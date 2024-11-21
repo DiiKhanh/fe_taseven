@@ -11,4 +11,5 @@ export interface ProfileModel {
   following: string[];
   uid: string;
   interests?: string[];
+  bio: string;
 }

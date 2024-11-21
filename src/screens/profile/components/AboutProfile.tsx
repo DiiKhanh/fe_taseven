@@ -1,7 +1,6 @@
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, TouchableOpacity} from 'react-native';
 import React, {useState} from 'react';
 import {
-  ButtonComponent,
   RowComponent,
   SectionComponent,
   SpaceComponent,
@@ -18,6 +17,7 @@ import {
   updateFollowing,
 } from '../../../redux/reducers/authReducer';
 import {ProfileModel} from '../../../models/ProfileModel';
+import userAPI from '../../../apis/userApi';
 import {LoadingModal} from '../../../modals';
 
 interface Props {
@@ -49,18 +49,59 @@ const AboutProfile = (props: Props) => {
   const dispatch = useDispatch();
 
 
+  const renderTabContent = (id: string) => {
+    let content = <></>;
+
+    switch (id) {
+      case 'about':
+        content = (
+          <>
+            <TextComponent text={profile.bio} />
+          </>
+        );
+        break;
+
+      default:
+        content = <></>;
+        break;
+    }
+    return content;
+  };
+
+  const handleToggleFollowing = async () => {
+    const api = '/update-following';
+
+    setIsLoading(true);
+    try {
+      const res = await userAPI.HandleUser(
+        api,
+        {
+          uid: auth.id,
+          authorId: profile.uid,
+        },
+        'put',
+      );
+      dispatch(updateFollowing(res.data));
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+    }
+  };
+
   return (
     <>
       <SectionComponent>
         <RowComponent>
           <TouchableOpacity
+            onPress={handleToggleFollowing}
             style={[
               globalStyles.button,
               {flex: 1, backgroundColor: appColors.primary},
             ]}>
             <Feather
               name={
-                auth.following && auth.following.includes(profile.id)
+                auth.following && auth.following.includes(profile.uid)
                   ? 'user-minus'
                   : 'user-plus'
               }
@@ -70,7 +111,7 @@ const AboutProfile = (props: Props) => {
             <SpaceComponent width={12} />
             <TextComponent
               text={
-                auth.following && auth.following.includes(profile.id)
+                auth.following && auth.following.includes(profile.uid)
                   ? 'Unfollow'
                   : 'Follow'
               }
@@ -97,7 +138,6 @@ const AboutProfile = (props: Props) => {
               font={fontFamilies.medium}
             />
           </TouchableOpacity>
-
         </RowComponent>
       </SectionComponent>
       <SectionComponent>
@@ -140,6 +180,7 @@ const AboutProfile = (props: Props) => {
             </TouchableOpacity>
           ))}
         </RowComponent>
+        {renderTabContent(tabSelected)}
       </SectionComponent>
 
       <LoadingModal visible={isLoading} />

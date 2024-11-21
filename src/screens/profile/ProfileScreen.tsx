@@ -72,7 +72,7 @@ const ProfileScreen = ({navigation, route}: any) => {
       console.log(res);
       setUserFollowers(res.data);
     } catch (error) {
-      console.log();
+      console.log(error);
     }
   };
 
